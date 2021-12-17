@@ -5,6 +5,7 @@
 package com.kleitonewerton.bingo;
 import java.util.Random;
 import java.util.ArrayList;
+
 /**
  *
  * @author KleitonEwerton
@@ -13,55 +14,112 @@ public class Cartela {
     
     String[][] tabuleiro;
     int numeroCartela;
+    static int qntCartelas = 0;
+    static int linhas = 5;
+    static int colunas = 5;
     
     public Cartela(int numeroCartela){
         
         this.numeroCartela = numeroCartela;
-        
         this.tabuleiro = iniciaCartela();
-        
+        qntCartelas += 1;
         
         
     }
     public static String[][] iniciaCartela(){
-        String[][] cart = new String[6][5] ;
-        
-        cart[0][0] = "B";cart[0][1] = "I";cart[0][2] = "N";cart[0][3] = "G";cart[0][4] = "O";
+        String[][] cart = new String[linhas][colunas] ;
         
         Random gerador = new Random();
-        String sorteado;
+        String sorteado = "";
         ArrayList<String> sorteados = new ArrayList();
         
-        for(int i = 1;i<6;i++)
-            for(int j=0;j<5;j++){
+        for(int i = 0;i<linhas;i++)
+            for(int j=0;j<colunas;j++){
                 while (true){
-                    sorteado = Integer.toString(1 + gerador.nextInt(76));
+                    int sort = -1;
+                    switch(j){
+                        case 0:
+                            sort = 1 + gerador.nextInt(15);
+
+                            break;
+                        case 1:
+                            sort = 16 + gerador.nextInt(15);
+ 
+                            break;
+                         case 2:
+                            sort = 31 + gerador.nextInt(15);
+                            
+                            break;
+                        case 3:
+                            sort = 46 + gerador.nextInt(15);
+                            
+                            break;
+                        case 4:
+                            sort = 61 + gerador.nextInt(15);
+                            
+                            break;
+                        }
+
+                    sorteado = Integer.toString(sort);
                     if(!sorteados.contains(sorteado)){
                         sorteados.add(sorteado);
                         cart[i][j] = sorteado;
                         break;
-                }
-                }
-                
+                    }
+                }  
             }
-                
-        cart[3][2] = "*";
+     
+        cart[2][2] = "(*)";
+ 
         return cart;     
     }
     
     public void printCartela(){
+        
         System.out.println("\n-------------------------------");
-        System.out.println("     Cartela de numero " + this.numeroCartela);
+        System.out.println("    Cartela de numero " + this.numeroCartela);
         System.out.println("-------------------------------");
-        for(int i = 0;i<6;i++){
-            for(int j = 0; j < 5;j++)
+        System.out.println("|   B    I     N     G     O  |");
+        System.out.println("-------------------------------");
+        for(int i = 0;i<linhas;i++){
+            for(int j = 0; j < colunas;j++)
                 
-                if(this.tabuleiro[i][j].length() == 1)System.out.print("|  "+this.tabuleiro[i][j] +"  ");
-                else System.out.print("|  "+this.tabuleiro[i][j] +" ");
+                switch(this.tabuleiro[i][j].length()){
+                    case 1:
+                        System.out.print("|  "+this.tabuleiro[i][j] + "  ");
+                        break;
+                    case 2:
+                        System.out.print("|  "+this.tabuleiro[i][j] + " ");
+                        break;
+                     case 3:
+                        System.out.print("| "+this.tabuleiro[i][j] + " ");
+                        break;
+                    case 4:
+                        System.out.print("| "+this.tabuleiro[i][j]);
+                        break;
+                }
+                    
             
             System.out.print("|");
-            if(i<5)System.out.println("\n|-----|-----|-----|-----|-----|");
+            if(i<4)System.out.println("\n|-----|-----|-----|-----|-----|");
         }
         System.out.println("\n-------------------------------");
     }
+    
+    public void marcarNumero(int numero){
+        
+        auxMarcarNumero(Integer.toString(numero));
+        
+    }
+    private void auxMarcarNumero(String numero){
+        
+        for(int i = 0; i < linhas;i++)
+            for(int j = 0;j<colunas;j++)
+                if(this.tabuleiro[i][j].equals(numero)){
+                    this.tabuleiro[i][j] = "(" + tabuleiro[i][j]+")";
+                    break;
+                }               
+        
+    }
+    
 }
