@@ -17,7 +17,7 @@ public class Bingo {
     
     public static int leituraNumero(){
  
-        int numero =  Integer. parseInt(JOptionPane.showInputDialog("USUARIO, DIGITE O NUMERO DE JOGADORES ATUAIS\n       DEVE SER MAIOR QUE ZERO"));
+        int numero =  Integer. parseInt(JOptionPane.showInputDialog("Usuario, digite o numero de jogadores atuais"));
         
         return numero;
     }
@@ -34,8 +34,14 @@ public class Bingo {
             }catch (Exception ex){System.out.println(" NAO FOI POSSIVEL LER TAL NUMERO");}
     }
     
-    public static void main(String[] args){
+    public static void mensagemBemVindo(){
+        
+        JOptionPane.showMessageDialog (null, "BEM VINDO AO JOGO DO BINGO");
+    }
     
+    public static void main(String[] args){
+        
+       mensagemBemVindo();
        JogoDoBingo jogo = new JogoDoBingo(perguntaNumero());
        jogo.iniciarJogo();
        

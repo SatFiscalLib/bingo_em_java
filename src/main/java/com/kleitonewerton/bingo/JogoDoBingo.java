@@ -6,6 +6,7 @@ package com.kleitonewerton.bingo;
 
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,6 +22,7 @@ public class JogoDoBingo {
     
     static int qntCartelas = 0;
     static int rodadas = 1;
+    static int ultimoNSorteado = -1;
     
     public JogoDoBingo(int qntCart){
         
@@ -37,6 +39,7 @@ public class JogoDoBingo {
     
     public void sorteio(){
         auxSorteio();
+        perguntaImprimir();
         rodadas += 1;
     }
     private void auxSorteio(){
@@ -50,10 +53,10 @@ public class JogoDoBingo {
                 System.out.println(" RODADA: " + rodadas +"\n O NUMERO " + numero + " FOI O SORTEADO DESSA RODADA\n");
                 numerosJaSorteados.add(numero);
                 marcarValores(numero);
+                ultimoNSorteado = numero;
                 return;
             }
         }
-        
     }
     
     private void marcarValores(int valor){
@@ -87,7 +90,9 @@ public class JogoDoBingo {
         
         int ganhadores = 0;
         boolean gameOver = false;
+        
         ArrayList<Integer> listGanhadores = new ArrayList();
+        String mensagem = "";
         
         for(int i = 0; i < cartelas.size();i++)
             if(cartelas.get(i).cartelaCompleta()){
@@ -96,12 +101,14 @@ public class JogoDoBingo {
                 gameOver = true;
             }
         if(gameOver){
-            if(ganhadores == 1)System.out.print("\n A seguinte cartela venceu: ");
-            else System.out.print("\n As seguintes cartelas venceram: ");
+            if(ganhadores == 1)mensagem += "\n A SEGUINTE CARTELA VENCEU: ";
+            else mensagem +="\n AS SEGUINTES CARTELAS VENCERAM: ";
             
             for(int j = 0; j < listGanhadores.size();j++)
-                System.out.print(listGanhadores.get(j) + ", ");
-            System.out.print("\n");
+                mensagem +=(listGanhadores.get(j) + " ");
+            
+            JOptionPane.showMessageDialog (null, mensagem);
+            auxPrintCartelas();
             }
         return gameOver;
     }
@@ -112,15 +119,16 @@ public class JogoDoBingo {
     
     private void perguntaImprimir(){
         
-        
+        int numero = JOptionPane.showConfirmDialog(null,"Numero sorteado " + ultimoNSorteado+". \nDeseja imprimir as cartelas da rodada " + rodadas+"?","Imprimir",JOptionPane.YES_NO_OPTION);
+        if(numero == 0)
+            auxPrintCartelas();
     }
     
     private void auxIniciarJogo(){
         while(true){
            
             sorteio();
-            perguntaImprimir();
-                
+            
             if(rodadas > 23 && ganhadores())
                 break; 
         }
