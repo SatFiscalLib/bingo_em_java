@@ -17,7 +17,7 @@ public class Bingo {
     
     public static int leituraNumero(){
  
-        int numero =  Integer. parseInt(JOptionPane.showInputDialog("USUARIO, DIGITE O NUMERO DE JOGADORES ATUAIS, DEVE SER MAIOR QUE ZERO"));
+        int numero =  Integer. parseInt(JOptionPane.showInputDialog("USUARIO, DIGITE O NUMERO DE JOGADORES ATUAIS\n       DEVE SER MAIOR QUE ZERO"));
         
         return numero;
     }
