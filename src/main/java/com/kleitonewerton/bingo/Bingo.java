@@ -3,31 +3,41 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.kleitonewerton.bingo;
-import java.util.ArrayList;
+
+import java.util.Scanner;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author KleitonEwerton
  */
 public class Bingo {
     
-    static ArrayList<Cartela> cartelas = new ArrayList();
+    static Scanner teclado = new Scanner(System.in);
+    
+    public static int leituraNumero(){
+ 
+        int numero =  Integer. parseInt(JOptionPane.showInputDialog("USUARIO, DIGITE O NUMERO DE JOGADORES ATUAIS, DEVE SER MAIOR QUE ZERO"));
+        
+        return numero;
+    }
+    
+    public static int perguntaNumero(){
+        
+        while(true)
+            try{
+               int numero = leituraNumero();
+    
+               if(numero > 0) return numero;
+               else System.out.println(" NUMERO DA JOGADORES INVALIDO");
+       
+            }catch (Exception ex){System.out.println(" NAO FOI POSSIVEL LER TAL NUMERO");}
+    }
     
     public static void main(String[] args){
     
-        
-        for(int i = 0; i <10 ;i++)
-            cartelas.add(new Cartela(i));
-            
-        for(int i = 0; i <10 ;i++)
-            cartelas.get(i).printCartela();
-        for(int i = 0; i <10 ;i++)
-            cartelas.get(i).marcarNumero(4);
-        for(int i = 0; i <10 ;i++)
-            cartelas.get(i).marcarNumero(1);
-        for(int i = 0; i <10 ;i++)
-            cartelas.get(i).marcarNumero(14);
-        for(int i = 0; i <10 ;i++)
-            cartelas.get(i).printCartela();
-        cartelas.clear();
+       JogoDoBingo jogo = new JogoDoBingo(perguntaNumero());
+       jogo.iniciarJogo();
+       
     }
 }
