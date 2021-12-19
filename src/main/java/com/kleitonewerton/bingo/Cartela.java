@@ -12,27 +12,31 @@ import java.util.ArrayList;
  */
 public class Cartela {
     
-    String[][] tabuleiro;
-    static int qntCartelas = 0;
     static Random gerador = new Random();
-    
+    private final String[][] tabuleiro;
     private final int numeroCartela;
+    static int qntCartelas = 0;
+    
     static final int LINHAS = 5;
     static final int COLUNAS = 5;
     
-    public Cartela(int numeroCartela){
+    /**
+    * @brief                                Construtor da classe Cartela
+    */
+    public Cartela(){
         
-        this.numeroCartela = numeroCartela;
+        this.numeroCartela = qntCartelas + 1;
         this.tabuleiro = iniciaCartela();
         qntCartelas += 1;
-        
-        
+       
     }
     
+    /**
+    * @brief                                Metodo usado para iniciar uma cartela(tabuleiro) respeitando as regras de numeracao, e que será atribuida a cartela desse objeto
+    */
     private String[][] iniciaCartela(){
         String[][] cart = new String[LINHAS][COLUNAS] ;
-        
-        
+     
         String sorteado;
         ArrayList<String> sorteados = new ArrayList();
         
@@ -58,7 +62,7 @@ public class Cartela {
                             break;
                         }
 
-                    sorteado =Integer.toString(sort);
+                    sorteado = Integer.toString(sort);
                     if(!sorteados.contains(sorteado)){
                         sorteados.add(sorteado);
                         cart[i][j] = sorteado;
@@ -72,9 +76,16 @@ public class Cartela {
         return cart;     
     }
     
+    /**
+    * @brief                                Método que chama a impressão da cartela 
+    */
     public void printCartela(){
         auxPrintCartela();
     }
+    
+    /**
+    * @brief                                Método que realiza a impressão da cartela 
+    */
     private void auxPrintCartela(){
         
         System.out.println("\n-------------------------------");
@@ -106,11 +117,18 @@ public class Cartela {
         System.out.println("\n-------------------------------");
     }
     
+    /**
+    * @brief                                Método que converte um número para String e tenta marca-lo na cartela
+    * @param numero                         Número que será convertido e marcado
+    */
     public void marcarNumero(int numero){
-        
+     
         auxMarcarNumero(Integer.toString(numero));
-        
     }
+    
+    /**
+    * @brief                                Método que marca uma String utilizando '()',mas somente se estiver presente na cartela
+    */
     private void auxMarcarNumero(String numero){
         
         for(int i = 0; i < LINHAS;i++)
@@ -122,9 +140,18 @@ public class Cartela {
         
     }
     
+    /**
+    * @brief                                Método que chama a verificação de cartela completa
+    * @return                               true caso esteja completa, false caso não esteja completa
+    */
     public boolean cartelaCompleta(){
         return auxCartelaCompleta();
     }
+    
+    /**
+    * @brief                                Método que  verifica se todas as posições da cartela está marcada
+    * @return                               true caso esteja completa, false caso não esteja completa
+    */
     private boolean auxCartelaCompleta(){
         
         for(int i = 0;i<LINHAS;i++)
@@ -135,10 +162,18 @@ public class Cartela {
         return true;
     }
     
+    /**
+    * @brief                                Método que retorna o número seguêncial da cartela 
+    * @return                               Número dessa cartela
+    */
     public int getNumeroCartela(){
         return this.numeroCartela;
     }
     
+    /**
+    * @brief                                Método que retorna o número de cartelas já criadas 
+    * @return                               Número de cartelas atuais
+    */
     public int getQuantidadeCartelas(){
         return Cartela.qntCartelas;
     }

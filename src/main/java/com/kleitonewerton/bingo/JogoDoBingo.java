@@ -15,122 +15,180 @@ import javax.swing.JOptionPane;
 
 public class JogoDoBingo {
     
-    static ArrayList<Cartela> cartelas = new ArrayList();
-    static ArrayList<Integer> numerosJaSorteados = new ArrayList();
+    private final ArrayList<Cartela> cartelas = new ArrayList();
+    private final ArrayList<Integer> numerosJaSorteados = new ArrayList();
     
     static Random gerador = new Random();
     
-    static int qntCartelas = 0;
-    static int rodadas = 1;
-    static int ultimoNSorteado = -1;
+    private int rodadas = 1;
+    private int ultimoNSorteado = -1;
     
-    public JogoDoBingo(int qntCart){
+    /**
+    * @brief                            Construtor da classe
+    * @param qntCartelas                Quantidade de cartelas a serem adicionadas
+    */
+    public JogoDoBingo(int qntCartelas){
         
-        addCartelas(qntCart);
-        
-        System.out.println("\n ESSAS SAO AS CARTELAS ATUAIS");
-        
+        addCartelas(qntCartelas);
+        System.out.println("\nAdiante voce podera ver, no terminal, as cartelas atuais.\n\nAo longo do jogo numeros marcados estarao entre '()'.\n\nBOA SIMULACAO :)");
+        JOptionPane.showMessageDialog(null, "Adiante você poderá ver, no terminal, as cartelas atuais.\n\nAo longo do jogo números marcados estarão entre '()'.\n\nBOA SIMULAÇÃO :)", "Aviso",JOptionPane.WARNING_MESSAGE);
         auxPrintCartelas();
     }
     
-    public int getQntCarletas(){
-        return JogoDoBingo.qntCartelas;
-    }
-    
-    public void sorteio(){
+    /**
+    * @brief                            Método para a chamada do sorteio e impressão das cartelas após cada rodada 
+    */
+    private void sorteio(){
         auxSorteio();
         perguntaImprimir();
-        rodadas += 1;
+        this.rodadas += 1;
     }
+    
+    /**
+    * @brief                            Método que sorteia o número da rodada atual
+    */
     private void auxSorteio(){
         
         while(true){
             
             int numero = 1 + gerador.nextInt(76);
             
-            if(!numerosJaSorteados.contains(numero)){
+            if(!this.numerosJaSorteados.contains(numero)){
                 
-                System.out.println(" RODADA: " + rodadas +"\n O NUMERO " + numero + " FOI O SORTEADO DESSA RODADA\n");
-                numerosJaSorteados.add(numero);
+                System.out.println(" RODADA: " +  getRodadaAtual() +"\n O NUMERO " + numero + " FOI O SORTEADO DESSA RODADA\n");
+                this.numerosJaSorteados.add(numero);
                 marcarValores(numero);
-                ultimoNSorteado = numero;
+                this.ultimoNSorteado = numero;
                 return;
             }
         }
     }
     
+    /**
+    * @breif                            Método que passa por todas as cartelas do jogo marcando o resultado 
+    */
     private void marcarValores(int valor){
-        for(int i = 0; i < qntCartelas;i++)
-            cartelas.get(i).marcarNumero(valor);
+        for(int i = 0; i < this.cartelas.size();i++)
+            this.cartelas.get(i).marcarNumero(valor);
     }
     
+    /**
+    * @brief                            Método que adiciona novas cartelas ao jogo 
+    */
     private void addCartelas(int qntAdicional){
-        int auxQntCartelas = qntCartelas; 
+        
         System.out.println("\n CRIANDO AS "+ qntAdicional+" NOVAS CARTELAS DO JOGO");
         
-        for(int i = auxQntCartelas;i < auxQntCartelas + qntAdicional;i++){
-            cartelas.add(new Cartela(i + 1));
-            qntCartelas += 1;
-        }
+        for(int i = 0;i < qntAdicional;i++)
+            this.cartelas.add(new Cartela());
+    
     }
     
+    /**
+    * @brief                            Método que chama a impressão de todas as cartelas 
+    */
     public void printCartelas(){
         auxPrintCartelas();
     }
+    
+    /**
+    * @brief                             Método que imprime todas as cartelas na tela 
+    */
     private void auxPrintCartelas(){
-        
-        for(int i = 0 ;i<qntCartelas;i++)
-            cartelas.get(i).printCartela();
+        for(int i = 0 ;i<this.cartelas.size();i++)
+            this.cartelas.get(i).printCartela();
     }
     
+    /**
+    * @brief                             Método chama o método para verificar se há ganhadores  
+    * @return                            true caso haja ganhadores, false caso não possua ganhadores
+    */
     public boolean ganhadores(){
         return auxGanhadores();
     }
+    
+    /**
+    * @brief                             Método que retorna se há algum ganhador ou não  
+    * @return                            true caso haja ganhadores, false caso não possua ganhadores
+    */
     private boolean auxGanhadores(){
         
-        int ganhadores = 0;
-        boolean gameOver = false;
-        
         ArrayList<Integer> listGanhadores = new ArrayList();
-        String mensagem = "";
-        
-        for(int i = 0; i < cartelas.size();i++)
-            if(cartelas.get(i).cartelaCompleta()){
-                listGanhadores.add(cartelas.get(i).getNumeroCartela());
-                ganhadores +=1;
+        boolean gameOver = false;
+      
+        for(int i = 0; i < this.cartelas.size();i++)
+            if(this.cartelas.get(i).cartelaCompleta()){
+                listGanhadores.add(this.cartelas.get(i).getNumeroCartela());
                 gameOver = true;
             }
-        if(gameOver){
-            if(ganhadores == 1)mensagem += "\n A SEGUINTE CARTELA VENCEU: ";
-            else mensagem +="\n AS SEGUINTES CARTELAS VENCERAM: ";
-            
-            for(int j = 0; j < listGanhadores.size();j++)
-                mensagem +=(listGanhadores.get(j) + " ");
-            
-            JOptionPane.showMessageDialog (null, mensagem);
-            auxPrintCartelas();
-            }
+        
+        if(gameOver)
+            imprimeGanhadores(listGanhadores);
+        
         return gameOver;
     }
     
-    public void iniciarJogo(){
-        auxIniciarJogo();
+    /**
+    * @brief                             Método que imprime o/os ganhador/ganhadores desse jogo de bingo
+    */
+    private void imprimeGanhadores(ArrayList<Integer> listGanhadores){
+        String mensagem = "";
+        if(1 == listGanhadores.size())
+            mensagem += "\n A SEGUINTE CARTELA VENCEU: ";
+        else 
+            mensagem +="\n AS SEGUINTES CARTELAS VENCERAM: ";
+            
+        for(int j = 0; j < listGanhadores.size();j++)
+            mensagem += (listGanhadores.get(j) + " ");
+        
+        auxPrintCartelas();
+        JOptionPane.showMessageDialog (null, mensagem, "GAME OVER", JOptionPane.DEFAULT_OPTION);
+        System.out.println(mensagem);
+        
+        
     }
     
+    /**
+    * @breif                            Método que pergunta a usuário se deseja imprimir as cartelas
+    */
     private void perguntaImprimir(){
         
-        int numero = JOptionPane.showConfirmDialog(null,"Numero sorteado " + ultimoNSorteado+". \nDeseja imprimir as cartelas da rodada " + rodadas+"?","Imprimir",JOptionPane.YES_NO_OPTION);
+        int numero = JOptionPane.showConfirmDialog(null,"NÚMERO SORTEADO: " + getUltimoNumero() +". \n\nDeseja imprimir as cartelas da rodada " + getRodadaAtual() + "?","IMPRESSÃO",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
         if(numero == 0)
             auxPrintCartelas();
     }
     
+    /**
+    * @breif                            Método que chama o iniciar jogo 
+    */
+    public void iniciarJogo(){
+        auxIniciarJogo();
+    }
+    
+    /**
+    * @brief                            Método que inicia todo o jogo
+    */
     private void auxIniciarJogo(){
         while(true){
-           
             sorteio();
-            
-            if(rodadas > 23 && ganhadores())
+            if(getRodadaAtual() > 23 && ganhadores())
                 break; 
         }
-    } 
+    }
+    
+    /**
+    * @brief                            Método que retorna a rodada utual desse jogo do bingo 
+    * @return                           Rodada atual
+    */
+    public int getRodadaAtual(){
+        return this.rodadas;
+    }
+    
+    /**
+    * @brief                            Método que retorna o último número sorteado desse jogo do bingo 
+    * @return                           Último número sorteado
+    */
+    public int getUltimoNumero(){
+        return this.ultimoNSorteado;
+    }
 }
