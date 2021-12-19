@@ -11,7 +11,7 @@
 ## 🏝️ Features
 
 - [x] Multiplas cartelas
-- [ ]  Multiplos jogadores
+- [x]  Multiplos jogadores
 
 
 ## 📌 Pré-requisitos
